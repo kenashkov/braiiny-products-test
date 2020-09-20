@@ -149,4 +149,8 @@ class ProductsCest
 
     //TODO - add a test on updating a local product that is deleted at the ERP
     //in this case the system does a check before update if the product is not found creates a new one
+
+    //no need to test deleting local product that is already deleted at the ERP as the delete requests are idempotent
+    //multiple requests for the same ID still produce 200 OK
+    //@see https://www.billy.dk/api/ -> Deleting a record
 }
