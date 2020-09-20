@@ -14,10 +14,24 @@ class ProductsCest
 
     private static function get_erp_api_token(): string
     {
+        $ret = '';
         //as we are not using the framework this needs to be done manually
         $local_registry_file = '../../../app/registry/local.php';
-        $registry_data = require($local_registry_file);
-        return $registry_data[\Kenashkov\Braiiny\Application\BillyDk::class]['api_token'];
+        $env_var = 'KENASHKOV_BRAIINY_APPLICATION_BILLYDK_API_TOKEN';
+        if (file_exists($local_registry_file)) { //should be readable
+            $registry_data = require($local_registry_file);
+            if (isset($registry_data[\Kenashkov\Braiiny\Application\BillyDk::class]['api_token'])) {
+                $ret = $registry_data[\Kenashkov\Braiiny\Application\BillyDk::class]['api_token'];
+            }
+
+        }
+        if (!$ret) {
+            $ret = getenv($env_var);
+        }
+        if (!$ret) {
+            throw new RuntimeException(sprintf('No API token could be found in %1$s or the environment variable %2$s.', $local_registry_file, $env_var));
+        }
+        return $ret;
     }
 
     private static function create_product(ApiTester $I): array
