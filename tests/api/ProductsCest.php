@@ -146,4 +146,7 @@ class ProductsCest
             throw $Exception;
         }
     }
+
+    //TODO - add a test on updating a local product that is deleted at the ERP
+    //in this case the system does a check before update if the product is not found creates a new one
 }
